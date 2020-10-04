@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Transportes</string>
+    <string name="comprar_titulo">Comprar Título</string>
+    <string name="tempo_real">Tempo Real</string>
+    <string name="trajetos_e_horarios">Trajetos e Horários</string>
+    <string name="paragens">Paragens</string>
+    <string name="ajuda">Ajuda</string>
+    <string name="title_activity_maps">Map</string>
+</resources>
