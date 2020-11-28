@@ -18,23 +18,24 @@ import java.io.InputStreamReader;
 
 public class timetable extends AppCompatActivity {
 
+    private WebView webView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timetable);
-       /* webView = (WebView) findViewById(R.id.webview);
+        webView = (WebView) findViewById(R.id.webviewtimetable);
         webView.setWebViewClient(new WebViewClient());
-        webView.loadUrl("https://ttsl.pt/avisos/novos-horarios-barreiro-terreiro-do-paco/");
+        webView.loadUrl("https://ttsl.pt/passageiros/horarios-de-ligacoes-fluviais/");
         WebSettings webSettings = webView.getSettings();
-        webSettings.setJavaScriptEnabled(true);*/
+        webSettings.setJavaScriptEnabled(true);
     }
 
- /*  @Override
+   @Override
     public void onBackPressed() {
         if (webView.canGoBack())
             webView.goBack();
         else
             super.onBackPressed();
-
-    }*/
+    }
 }
