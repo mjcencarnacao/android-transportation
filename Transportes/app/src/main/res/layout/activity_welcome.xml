@@ -4,18 +4,49 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/welcomescreen"
-    tools:context=".Welcome">
+    android:background="@drawable/gradient"
+    tools:context=".ui.Welcome">
 
-    <Button
-        android:id="@+id/start"
+    <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/start_button"
+        android:layout_marginTop="100dp"
+        android:text="Seja Bem Vindo"
+        android:textColor="@android:color/white"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.197"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="170dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="12dp"
+        android:text="Vamos começar?"
+        android:textColor="@color/gray"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="@+id/textView"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <ImageView
+        android:id="@+id/start"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginStart="91dp"
+        android:layout_marginEnd="91dp"
         android:onClick="open"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.546" />
+        app:layout_constraintVertical_bias="0.499"
+        app:srcCompat="@drawable/sailboat" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
