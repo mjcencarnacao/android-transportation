@@ -1,39 +1,38 @@
 package com.mjceo.transportes.utils;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 public class User {
 
+    private String id;
     private String email;
-    private String user_id;
-    private String username;
+    private String name;
 
-    public User(String email, String user_id, String username) {
+    public User(String id, String email, String name) {
+        this.id = id;
         this.email = email;
-        this.user_id = user_id;
-        this.username = username;
+        this.name = name;
     }
 
-    public User() { }
-
-    public String getEmail() { return email; }
-
-    public void setEmail(String email) { this.email = email; }
-
-    public String getUser_id() {
-        return user_id;
+    public String getId() {
+        return id;
     }
 
-    public void setUser_id(String user_id) {
-        this.user_id = user_id;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getEmail() {
+        return email;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

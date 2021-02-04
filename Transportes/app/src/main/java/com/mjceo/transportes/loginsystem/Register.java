@@ -15,7 +15,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.mjceo.transportes.R;
@@ -26,10 +25,7 @@ import java.util.Map;
 
 public class Register extends AppCompatActivity {
 
-    String userID;
-    private EditText mail;
-    private EditText pass;
-    private EditText name;
+    private EditText mail, name, pass, confirm;
     private FirebaseAuth mAuth;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -40,60 +36,36 @@ public class Register extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mail = (EditText) findViewById(R.id.email);
         pass = (EditText) findViewById(R.id.password);
+        confirm = (EditText) findViewById(R.id.confirmpassword);
         name = (EditText) findViewById(R.id.name);
     }
 
     public void open(View view) {
         if (view.getId() == R.id.register) {
-            final String email = mail.getText().toString();
-            final String password = pass.getText().toString();
-            final String nome = name.getText().toString();
-            if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
-                Toast.makeText(this, "Please enter an e-mail address", Toast.LENGTH_LONG);
+            if (TextUtils.isEmpty(mail.getText().toString()) || TextUtils.isEmpty(pass.getText().toString()) || !confirm.getText().toString().equals(pass.getText().toString())) {
+                Toast.makeText(this, "Por favor responda corretamente a todos os campos.", Toast.LENGTH_LONG).show();
                 return;
             }
-            mAuth.createUserWithEmailAndPassword(email, password)
+            mAuth.createUserWithEmailAndPassword(mail.getText().toString(), pass.getText().toString())
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                userID = mAuth.getCurrentUser().getUid();
-                                DocumentReference documentReference = db.collection("users").document(userID);
+                                DocumentReference documentReference = db.collection("Users").document(mAuth.getCurrentUser().getUid());
                                 Map<String, Object> save = new HashMap<>();
-                                save.put("Nome: ", nome);
-                                save.put("E-mail: ", email);
-                                save.put("User ID ", userID);
+                                save.put("Nome", name.getText().toString());
+                                save.put("E-mail", mail.getText().toString());
+                                save.put("User ID", mAuth.getCurrentUser().getUid());
                                 documentReference.set(save).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
                                     }
                                 });
-                                FirebaseUser user = mAuth.getCurrentUser();
-                                updateUI(user);
-                            } else {
-                                Toast.makeText(Register.this, "Authentication failed.",
-                                        Toast.LENGTH_SHORT).show();
-                                updateUI(null);
+                                startActivity(new Intent(Register.this, MainActivity.class));
+                                finish();
                             }
                         }
                     });
-
-
-        } else
-            Toast.makeText(this, "Error", Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser != null)
-            updateUI(currentUser);
-    }
-
-    public void updateUI(FirebaseUser currentUser) {
-        Intent launch = new Intent(this, MainActivity.class);
-        startActivity(launch);
+        }
     }
 }

@@ -12,14 +12,14 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".utils.UserClient"
         android:allowBackup="true"
         android:icon="@drawable/bus"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".loginsystem.Register"/>
+        <activity android:name=".loginsystem.Profile"></activity>
+        <activity android:name=".loginsystem.Register" />
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -37,11 +37,11 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".ui.RealTime"
+            android:name=".geolocation.RealTime"
             android:label="@string/title_activity_real_time"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.Stops"
+            android:name=".geolocation.Stops"
             android:label="@string/title_activity_stops" />
         <activity android:name=".loginsystem.Login" />
         <activity

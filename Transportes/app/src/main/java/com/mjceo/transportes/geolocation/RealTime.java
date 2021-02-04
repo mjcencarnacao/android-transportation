@@ -1,4 +1,4 @@
-package com.mjceo.transportes.ui;
+package com.mjceo.transportes.geolocation;
 
 import android.Manifest;
 import android.content.Intent;
@@ -7,10 +7,10 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
-import android.widget.Toast;
+import android.os.Handler;
+import android.os.Looper;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
@@ -24,78 +24,85 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.mjceo.transportes.utils.User;
 import com.mjceo.transportes.R;
-import com.mjceo.transportes.geolocation.UserLocation;
 import com.mjceo.transportes.loginsystem.Login;
-import com.mjceo.transportes.utils.UserClient;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import android.os.*;
 
 public class RealTime extends FragmentActivity implements OnMapReadyCallback {
 
-    String userID;
+    /* Problemas a resolver:
+    Arranjar icone adequado para os marcadores, os atuais são de enormes dimensoes
+    Ao sair da atividade apagar localização do utilizador que saiu em especifico
+     */
+
+    private GeoPoint position;
     private GoogleMap mMap;
-    private UserLocation mUserLocation;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FusedLocationProviderClient fusedLocationProviderClient;
+    Handler handler = new Handler();
+    Runnable runnable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_real_time);
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(RealTime.this);
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-            userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-            getUserDetails();
-            getUsersLocation();
+            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+            mapFragment.getMapAsync(RealTime.this);
+            fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         } else {
-            Intent launch = new Intent(this, Login.class);
-            startActivity(launch);
+            finish();
+            startActivity(new Intent(this, Login.class));
         }
+
+    }
+    @Override
+    protected void onResume() {
+        handler.postDelayed(runnable = new Runnable() {
+            public void run() {
+                getUserDetails();
+                getUsersLocation();
+                handler.postDelayed(this, 5000);
+
+            }
+        }, 5000);
+        super.onResume();
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.map_style));
-        Toast.makeText(this, "Map is Ready", Toast.LENGTH_SHORT).show();
         mMap = googleMap;
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
             return;
-        }
         mMap.setMyLocationEnabled(true);
     }
 
     private void saveLocation() {
-        if (mUserLocation != null) {
-            DocumentReference documentReference = db.collection("User Locations").document(userID);
-            documentReference.set(mUserLocation).addOnCompleteListener(new OnCompleteListener<Void>() {
+        if (position != null) {
+            Map<String, Object> save = new HashMap<>();
+            save.put("Location", position);
+            DocumentReference documentReference = db.collection("User Locations").document(FirebaseAuth.getInstance().getCurrentUser().getUid());
+            documentReference.set(save).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
-                public void onComplete(@NonNull Task<Void> task) {
+                public void onSuccess(Void aVoid) {
                 }
             });
         }
@@ -113,10 +120,8 @@ public class RealTime extends FragmentActivity implements OnMapReadyCallback {
                     try {
                         Geocoder geocoder = new Geocoder(RealTime.this, Locale.getDefault());
                         List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-                        LatLng latlng = new LatLng(addresses.get(0).getLatitude(), addresses.get(0).getLongitude());
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 18f));
-                        mUserLocation.setGeo_Point(new GeoPoint(addresses.get(0).getLatitude(), addresses.get(0).getLongitude()));
-                        mUserLocation.setTimestamp(null);
+                        position = new GeoPoint(addresses.get(0).getLatitude(), addresses.get(0).getLongitude());
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(addresses.get(0).getLatitude(), addresses.get(0).getLongitude()), 18f));
                         saveLocation();
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -127,21 +132,17 @@ public class RealTime extends FragmentActivity implements OnMapReadyCallback {
     }
 
     private void getUserDetails() {
-        if (mUserLocation == null) {
-            mUserLocation = new UserLocation();
-            DocumentReference userRef = db.collection("users").document(userID);
-            userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        User user = task.getResult().toObject(User.class);
-                        ((UserClient)getApplicationContext()).setUser(user);
-                        getLocation();
-                    }
+        DocumentReference userRef = db.collection("Users").document(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    getLocation();
                 }
-            });
-        }
+            }
+        });
     }
+
 
     private void getUsersLocation() {
         db.collection("User Locations")
@@ -151,9 +152,8 @@ public class RealTime extends FragmentActivity implements OnMapReadyCallback {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                GeoPoint x = document.getGeoPoint("geo_Point");
-                                LatLng y = new LatLng(x.getLatitude(), x.getLongitude());
-                                mMap.addMarker(new MarkerOptions().position(y).title("User 2"));
+                                GeoPoint save = document.getGeoPoint("Location");
+                                mMap.addMarker(new MarkerOptions().position(new LatLng(save.getLatitude(), save.getLongitude())));
                             }
                         }
                     }

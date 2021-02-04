@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/local"
+            android:icon="@drawable/ic_action_user"
+            android:title="Modo local" />
+
+        <item
+            android:id="@+id/turist"
+            android:icon="@drawable/ic_action_user"
+            android:title="Modo turista" />
+
+        <item
+            android:id="@+id/weather"
+            android:icon="@drawable/mete"
+            android:title="Meteorologia" />
+    </group>
+
+    <item android:title="Conta">
+
+        <menu>
+
+            <group android:checkableBehavior="single">
+
+                <item
+                    android:id="@+id/nav_login"
+                    android:icon="@drawable/ic_action_user"
+                    android:title="Entrar" />
+
+                <item
+                    android:id="@+id/nav_profile"
+                    android:icon="@drawable/profile"
+                    android:title="Perfil" />
+
+                <item
+                    android:id="@+id/nav_logout"
+                    android:icon="@drawable/logout"
+                    android:title="Sair" />
+            </group>
+        </menu>
+    </item>
+
+    <item android:title="Comunicação">
+
+        <menu>
+            <group android:checkableBehavior="single">
+
+                <item
+                    android:id="@+id/nav_share"
+                    android:icon="@drawable/star"
+                    android:title="Avalie-nos" />
+
+                <item
+                    android:id="@+id/about"
+                    android:icon="@drawable/about"
+                    android:title="Sobre nós" />
+
+                <item
+                    android:id="@+id/report"
+                    android:icon="@drawable/erro"
+                    android:title="Reportar um erro" />
+            </group>
+        </menu>
+    </item>
+</menu>
