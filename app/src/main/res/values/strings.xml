@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">Transportation</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="todo">TODO</string>
+    <string name="dashboard_welcome">Seja Bem Vindo</string>
+    <string name="dashboard_subtitle">O que deseja fazer?</string>
+    <string name="dashboard_search_hint">Procurar por ...</string>
+    <string name="dashboard_payments">Pagamentos</string>
+    <string name="dashboard_real_time">Tempo Real</string>
+    <string name="dashboard_schedule">Horários</string>
+    <string name="dashboard_Stops">Paragens</string>
+    <string name="dashboard_settings">Definições</string>
+    <string name="dashboard_help">Ajuda</string>
+    <string name="drawer_profile">Perfil</string>
+    <string name="drawer_exit">Sair</string>
+    <string name="drawer_rate_us">Avalie-nos</string>
+    <string name="drawer_about_us">Sobre nós</string>
+    <string name="drawer_report_bug">Reportar um erro</string>
+    <string name="drawer_communication_title">Comunicação</string>
+    <string name="drawer_account_title">Conta</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="login_sign_in">Entrar</string>
+    <string name="login_register">Registar</string>
+    <string name="login_recovery">Recuperação</string>
+    <string name="login_welcome">Seja Bem Vindo</string>
+    <string name="drawer_mode">Modo</string>
+    <string name="local_mode">Modo Local</string>
+    <string name="turist_mode">Modo Turista</string>
+    <string name="email_address_login">Endereço de E-mail</string>
+    <string name="register_name">Nome</string>
+    <string name="drawer_logout">Logout</string>
+</resources>

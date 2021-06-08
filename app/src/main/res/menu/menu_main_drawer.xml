@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="@string/drawer_mode">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_turist_mode"
+                    android:icon="@drawable/ic_user"
+                    android:title="@string/turist_mode" />
+
+                <item
+                    android:id="@+id/nav_local_mode"
+                    android:icon="@drawable/ic_user"
+                    android:title="@string/local_mode" />
+            </group>
+        </menu>
+    </item>
+
+    <item android:title="@string/drawer_account_title">
+        <menu>
+            <group android:checkableBehavior="single">
+
+                <item
+                    android:id="@+id/nav_profile"
+                    android:icon="@drawable/ic_user"
+                    android:title="@string/drawer_profile" />
+
+                <item
+                    android:id="@+id/nav_logout"
+                    android:icon="@drawable/ic_login_arrow"
+                    android:title="@string/drawer_logout" />
+
+                <item
+                    android:id="@+id/nav_leave"
+                    android:icon="@drawable/ic_login_arrow"
+                    android:title="@string/drawer_exit" />
+            </group>
+        </menu>
+    </item>
+
+    <item android:title="@string/drawer_communication_title">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_rate"
+                    android:icon="@drawable/ic_star"
+                    android:title="@string/drawer_rate_us" />
+
+                <item
+                    android:id="@+id/nav_aboutDrawer"
+                    android:icon="@drawable/ic_help"
+                    android:title="@string/drawer_about_us" />
+
+                <item
+                    android:id="@+id/nav_reportItem"
+                    android:icon="@drawable/ic_error"
+                    android:title="@string/drawer_report_bug" />
+            </group>
+        </menu>
+    </item>
+</menu>
